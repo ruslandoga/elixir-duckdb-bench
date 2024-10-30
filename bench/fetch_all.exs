@@ -1,12 +1,14 @@
-sql = fn rows ->
-  """
-  select
-    i as integer,
-    i / 1.0 as float,
-    'hello' || i as text,
-    null
-  from range(1, #{rows}) as t(i)
-  """
+sql = """
+select
+  i as integer,
+  i / 1.0 as float,
+  'hello' || i as text,
+  null
+from range(1, $1) as t(i)
+"""
+
+interpolate_sql = fn rows ->
+  String.replace(sql, "$1", Integer.to_string(rows))
 end
 
 Benchee.run(
@@ -18,11 +20,14 @@ Benchee.run(
          db = DuxDB.open_ext(":memory:", config)
          DuxDB.destroy_config(config)
          conn = DuxDB.connect(db)
-         result = DuxDB.query_dirty_cpu(conn, sql.(rows))
-         %{db: db, conn: conn, result: result}
+         stmt = DuxDB.prepare(conn, interpolate_sql.(rows))
+         # see below
+         # stmt = DuxDB.prepare(conn, sql)
+         # DuxDB.bind_int64(stmt, 1, rows)
+         %{db: db, conn: conn, stmt: stmt}
        end,
-       after_scenario: fn %{db: db, conn: conn, result: result} ->
-         DuxDB.destroy_result(result)
+       after_scenario: fn %{db: db, conn: conn, stmt: stmt} ->
+         DuxDB.destroy_prepare(stmt)
          DuxDB.disconnect(conn)
          DuxDB.close(db)
        end},
@@ -31,21 +36,15 @@ Benchee.run(
        before_scenario: fn rows ->
          {:ok, db} = Duckdbex.open()
          {:ok, conn} = Duckdbex.connection(db)
-         {:ok, result} = Duckdbex.query(conn, sql.(rows))
-         %{db: db, conn: conn, result: result}
-       end},
-    "1_duckdbex_fetch_chunks" =>
-      {&Bench.duckdbex_fetch_chunks/1,
-       before_scenario: fn rows ->
-         {:ok, db} = Duckdbex.open()
-         {:ok, conn} = Duckdbex.connection(db)
-         {:ok, result} = Duckdbex.query(conn, sql.(rows))
-         %{db: db, conn: conn, result: result}
+         # TODO how to bind parameters to prepared statements in Duckdbex?
+         # the README example doesn't work
+         {:ok, stmt} = Duckdbex.prepare_statement(conn, interpolate_sql.(rows))
+         %{db: db, conn: conn, stmt: stmt}
        end}
   },
   inputs: %{
     "100 rows" => 100,
-    "100000 rows" => 100_000,
-    "100000000 rows" => 100_000_000
+    "100000 rows" => 100_000
+    # "100000000 rows" => 100_000_000
   }
 )
