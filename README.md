@@ -10,20 +10,36 @@ Erlang 27.1.2
 JIT enabled: true
 
 ##### With input 100 rows #####
-Name                           ips        average  deviation         median         99th %
-0_duxdb                     8.90 K      112.38 μs    ±18.93%      106.84 μs      240.15 μs
-1_duckdbex_fetch_all        5.74 K      174.27 μs     ±9.18%      173.56 μs      212.12 μs
+Name                 ips        average  deviation         median         99th %
+0_duxdb           8.85 K      112.98 μs    ±31.25%      108.59 μs      167.22 μs
+1_duckdbex        5.75 K      174.04 μs    ±21.27%      166.12 μs      244.01 μs
 
 Comparison: 
-0_duxdb                     8.90 K
-1_duckdbex_fetch_all        5.74 K - 1.55x slower +61.90 μs
+0_duxdb           8.85 K
+1_duckdbex        5.75 K - 1.54x slower +61.06 μs
+
+Memory usage statistics:
+
+Name          Memory usage
+0_duxdb            5.10 KB
+1_duckdbex         1.51 KB - 0.30x memory usage -3.59375 KB
+
+**All measurements for memory usage were the same**
 
 ##### With input 100000 rows #####
-Name                           ips        average  deviation         median         99th %
-0_duxdb                      65.80       15.20 ms     ±5.59%       15.13 ms       17.46 ms
-1_duckdbex_fetch_all         21.60       46.30 ms     ±7.57%       44.06 ms       56.67 ms
+Name                 ips        average  deviation         median         99th %
+0_duxdb            69.72       14.34 ms     ±6.31%       14.12 ms       18.25 ms
+1_duckdbex         22.08       45.29 ms     ±7.44%       42.90 ms       52.27 ms
 
 Comparison: 
-0_duxdb                      65.80
-1_duckdbex_fetch_all         21.60 - 3.05x slower +31.10 ms
+0_duxdb            69.72
+1_duckdbex         22.08 - 3.16x slower +30.95 ms
+
+Memory usage statistics:
+
+Name          Memory usage
+0_duxdb           10.19 MB
+1_duckdbex      0.00147 MB - 0.00x memory usage -10.18739 MB
+
+**All measurements for memory usage were the same**
 ```
