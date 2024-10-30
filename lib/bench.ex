@@ -20,19 +20,19 @@ defmodule Bench do
   end
 
   def duxdb_fetch_all(%{stmt: stmt}) do
-    result = DuxDB.execute_prepared(stmt)
-    chunks = duxdb_fetch_all(result, DuxDB.column_count(result))
+    result = DuxDB.execute_prepared_dirty_cpu(stmt)
+    chunks = duxdb_fetch_all(result, DuxDB.column_count(result), _acc = [])
     DuxDB.destroy_result(result)
     chunks
   end
 
-  defp duxdb_fetch_all(result, cols) do
+  defp duxdb_fetch_all(result, cols, acc) do
     case DuxDB.fetch_chunk(result) do
       chunk when is_reference(chunk) ->
-        [duxdb_fetch_all_vectors(chunk, 0, cols) | duxdb_fetch_all(result, cols)]
+        duxdb_fetch_all(result, cols, [duxdb_fetch_all_vectors(chunk, 0, cols) | acc])
 
       nil ->
-        []
+        :lists.reverse(acc)
     end
   end
 

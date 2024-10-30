@@ -31,7 +31,7 @@ Benchee.run(
          DuxDB.disconnect(conn)
          DuxDB.close(db)
        end},
-    "1_duckdbex_fetch_all" =>
+    "1_duckdbex" =>
       {&Bench.duckdbex_fetch_all/1,
        before_scenario: fn rows ->
          {:ok, db} = Duckdbex.open()
@@ -46,5 +46,6 @@ Benchee.run(
     "100 rows" => 100,
     "100000 rows" => 100_000
     # "100000000 rows" => 100_000_000
-  }
+  },
+  memory_time: 2
 )
