@@ -13,7 +13,7 @@ end
 
 Benchee.run(
   %{
-    "0_duxdb" =>
+    "duxdb" =>
       {&Bench.duxdb_fetch_all/1,
        before_scenario: fn rows ->
          config = DuxDB.create_config()
@@ -31,8 +31,18 @@ Benchee.run(
          DuxDB.disconnect(conn)
          DuxDB.close(db)
        end},
-    "1_duckdbex" =>
+    "duckdbex.fetch_all" =>
       {&Bench.duckdbex_fetch_all/1,
+       before_scenario: fn rows ->
+         {:ok, db} = Duckdbex.open()
+         {:ok, conn} = Duckdbex.connection(db)
+         # TODO how to bind parameters to prepared statements in Duckdbex?
+         # the README example doesn't work
+         {:ok, stmt} = Duckdbex.prepare_statement(conn, interpolate_sql.(rows))
+         %{db: db, conn: conn, stmt: stmt}
+       end},
+    "duckdbex.fetch_chunk (all)" =>
+      {&Bench.duckdbex_fetch_chunks/1,
        before_scenario: fn rows ->
          {:ok, db} = Duckdbex.open()
          {:ok, conn} = Duckdbex.connection(db)

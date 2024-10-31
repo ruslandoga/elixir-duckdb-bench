@@ -8,7 +8,8 @@ defmodule Bench do
     Duckdbex.fetch_all(result)
   end
 
-  def duckdbex_fetch_chunks(%{result: result}) do
+  def duckdbex_fetch_chunks(%{stmt: stmt}) do
+    {:ok, result} = Duckdbex.execute_statement(stmt)
     duckdbex_fetch_all_chunks(result)
   end
 
