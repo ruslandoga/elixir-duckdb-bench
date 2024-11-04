@@ -16,9 +16,7 @@ Benchee.run(
     "duxdb" =>
       {&Bench.duxdb_fetch_all/1,
        before_scenario: fn rows ->
-         config = DuxDB.create_config()
-         db = DuxDB.open_ext(":memory:", config)
-         DuxDB.destroy_config(config)
+         db = DuxDB.open(":memory:")
          conn = DuxDB.connect(db)
          stmt = DuxDB.prepare(conn, interpolate_sql.(rows))
          # see below

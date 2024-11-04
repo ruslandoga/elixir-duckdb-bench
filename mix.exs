@@ -23,6 +23,7 @@ defmodule Bench.MixProject do
     [
       {:duckdbex, "~> 0.3.6"},
       {:duxdb, github: "ruslandoga/duxdb"},
+      # {:duxdb, path: "../duxdb"},
       {:benchee, "~> 1.3"}
     ]
   end
