@@ -11,41 +11,41 @@ JIT enabled: true
 
 ##### With input 100 rows #####
 Name                                 ips        average  deviation         median         99th %
-duckdbex.fetch_chunk (all)        8.41 K      118.96 μs    ±14.54%      117.65 μs      164.34 μs
-duxdb                             8.09 K      123.54 μs    ±10.22%      121.99 μs      162.48 μs
-duckdbex.fetch_all                6.10 K      163.87 μs    ±14.43%      170.19 μs      208.77 μs
+duxdb                             9.17 K      109.01 μs    ±19.81%      106.37 μs      147.04 μs
+duckdbex.fetch_chunk (all)        7.38 K      135.44 μs    ±12.54%      134.43 μs      175.58 μs
+duckdbex.fetch_all                6.40 K      156.18 μs    ±24.41%      148.44 μs      212.55 μs
 
 Comparison: 
-duckdbex.fetch_chunk (all)        8.41 K
-duxdb                             8.09 K - 1.04x slower +4.58 μs
-duckdbex.fetch_all                6.10 K - 1.38x slower +44.92 μs
+duxdb                             9.17 K
+duckdbex.fetch_chunk (all)        7.38 K - 1.24x slower +26.43 μs
+duckdbex.fetch_all                6.40 K - 1.43x slower +47.17 μs
 
 Memory usage statistics:
 
 Name                          Memory usage
-duckdbex.fetch_chunk (all)         1.48 KB
-duxdb                              5.10 KB - 3.44x memory usage +3.62 KB
-duckdbex.fetch_all                 1.51 KB - 1.02x memory usage +0.0234 KB
+duxdb                              5.10 KB
+duckdbex.fetch_chunk (all)         1.48 KB - 0.29x memory usage -3.61719 KB
+duckdbex.fetch_all                 1.51 KB - 0.30x memory usage -3.59375 KB
 
 **All measurements for memory usage were the same**
 
 ##### With input 100000 rows #####
 Name                                 ips        average  deviation         median         99th %
-duxdb                              69.15       14.46 ms     ±5.00%       14.45 ms       16.34 ms
-duckdbex.fetch_chunk (all)         21.78       45.91 ms     ±2.83%       45.74 ms       51.04 ms
-duckdbex.fetch_all                 21.64       46.22 ms     ±7.89%       43.76 ms       54.58 ms
+duxdb                              67.24       14.87 ms     ±5.57%       14.69 ms       16.86 ms
+duckdbex.fetch_chunk (all)         21.82       45.82 ms     ±2.33%       45.41 ms       49.86 ms
+duckdbex.fetch_all                 21.55       46.41 ms     ±7.35%       44.17 ms       52.90 ms
 
 Comparison: 
-duxdb                              69.15
-duckdbex.fetch_chunk (all)         21.78 - 3.18x slower +31.45 ms
-duckdbex.fetch_all                 21.64 - 3.20x slower +31.76 ms
+duxdb                              67.24
+duckdbex.fetch_chunk (all)         21.82 - 3.08x slower +30.95 ms
+duckdbex.fetch_all                 21.55 - 3.12x slower +31.54 ms
 
 Memory usage statistics:
 
 Name                          Memory usage
 duxdb                             10.19 MB
 duckdbex.fetch_chunk (all)        10.59 MB - 1.04x memory usage +0.40 MB
-duckdbex.fetch_all              0.00147 MB - 0.00x memory usage -10.18739 MB
+duckdbex.fetch_all              0.00147 MB - 0.00x memory usage -10.18738 MB
 
 **All measurements for memory usage were the same**
 ```
